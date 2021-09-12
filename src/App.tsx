@@ -18,7 +18,7 @@ function App() {
   }, [todoList]);
 
   const handleAddTask = () => {
-    if (task.length === 0) {
+    if (task.trim().length === 0) {
       return;
     }
 
@@ -51,7 +51,7 @@ function App() {
         />
 
         <button
-          disabled={task.length === 0 ? true : false}
+          disabled={task.trim().length === 0 ? true : false}
           className='btn btn-primary'
           onClick={handleAddTask}
         >
