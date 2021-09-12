@@ -1,24 +1,65 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from "react";
+
+import List from "./components/List";
+
+export interface ITask {
+  id: number;
+  task: string;
+}
+
+let initialState: ITask[] = JSON.parse(localStorage.getItem("todoList")!) || [];
 
 function App() {
+  const [todoList, setTodoList] = useState<ITask[]>(initialState);
+  const [task, setTask] = useState<string>("");
+
+  useEffect(() => {
+    localStorage.setItem("todoList", JSON.stringify(todoList));
+  }, [todoList]);
+
+  const handleAddTask = () => {
+    if (task.length === 0) {
+      return;
+    }
+
+    const newTodo: ITask = {
+      id: +Math.random().toString().split(".")[1],
+      task,
+    };
+
+    setTodoList([newTodo, ...todoList]);
+    setTask("");
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <div className='container'>
+      <h1>TodoApp DevTeam504</h1>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleAddTask();
+        }}
+      >
+        <input
+          className='todo-input'
+          type='text'
+          name='task'
+          id='text'
+          autoComplete={"off"}
+          value={task}
+          onChange={({ target }) => setTask(target.value)}
+        />
+
+        <button
+          disabled={task.length === 0 ? true : false}
+          className='btn btn-primary'
+          onClick={handleAddTask}
         >
-          Learn React
-        </a>
-      </header>
+          Add Task
+        </button>
+      </form>
+
+      <List todoList={todoList} setTodoList={setTodoList} />
     </div>
   );
 }
