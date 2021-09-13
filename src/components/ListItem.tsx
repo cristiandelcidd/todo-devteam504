@@ -13,18 +13,19 @@ interface Props {
 const ListItem: FC<Props> = ({ todoItem, setTodoList, todoList }) => {
   const handleDeleteItem = () => {
     Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      title: `Delete (${todoItem.task})?`,
+      text: "Are you sure?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: "Yes",
+      cancelButtonText: "No",
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire("Deleted!", "Your task has been deleted.", "success");
-        todoList = todoList.filter((item) => item.id !== todoItem.id);
-        setTodoList(todoList);
+        const newTodoList = todoList.filter((item) => item.id !== todoItem.id);
+        setTodoList(newTodoList);
       }
     });
   };
